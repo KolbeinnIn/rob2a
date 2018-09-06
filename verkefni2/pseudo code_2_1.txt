@@ -1,0 +1,14 @@
+#pragma config(Motor,  port2,           rightMotor,    tmotorNormal, openLoop, reversed)
+#pragma config(Motor,  port3,           leftMotor,     tmotorNormal, openLoop)
+const timePer50 = some time value
+
+
+task main()
+{
+	for i less than 5, i++:
+		move forward
+		wait for timePer50 * (i+1)ms
+		move backwards
+		wait for timePer50 * (i+1)ms
+		
+}
