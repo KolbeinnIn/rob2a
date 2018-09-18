@@ -3,7 +3,26 @@
 #pragma config(Motor, port5, armMotor, tmotorNormal, openLoop)
 
 static int timePer50 = 965; // The time it takes (in ms) to go about 50cm
-//static int timePer50 = 100; // The time it takes (in ms) to go about 50cm
+int power = 127;
+
+void drive(int mul)
+{
+	motor[leftMotor] = mul * power;
+	motor[rightMotor] = mul * power;
+}
+
+void driveSuicide(int *i){
+	drive(1);
+
+	writeDebugStreamLine("%d", *i);
+	writeDebugStreamLine("%d", timePer50 * (*i+1));
+
+	wait1Msec(timePer50 * (*i + 1));
+
+	drive(-1);
+
+	wait1Msec(timePer50 * (*i + 1));
+}
 
 task main()
 {
@@ -11,26 +30,9 @@ task main()
 
 	for (int i = 0; i < 5; i++)
 	{
-		motor[rightMotor] = 127;
-		motor[leftMotor] = 127;
+		driveSuicide(&i);
 
-		writeDebugStreamLine("%d", i);
-		writeDebugStreamLine("%d", timePer50*(i+1));
-
-		wait1Msec(timePer50 * (i + 1));
-
-		motor[rightMotor] = 0;
-		motor[leftMotor] = 0;
-
-		wait1Msec(200);
-
-		motor[rightMotor] = -127;
-		motor[leftMotor] = -127;
-
-		wait1Msec(timePer50 * (i + 1));
-
-		motor[rightMotor] = 0;
-		motor[leftMotor] = 0;
+		drive(0);
 
 		wait1Msec(200);
 	}
