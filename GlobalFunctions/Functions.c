@@ -7,9 +7,10 @@ void drive(float mul)
 
 task stopButton()
 {
-	while(SensorValue[touchSensor] == 1)
+	while(SensorValue[touchSensor] == 0)
 	{
-		writeDebugStreamLine("Takki: %d", SensorValue[touchSensor]);
-		StopAllTasks();
 	}
+
+	writeDebugStreamLine("Takki: %d", SensorValue[touchSensor]);
+	StopAllTasks();
 }

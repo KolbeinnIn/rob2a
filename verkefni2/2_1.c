@@ -8,7 +8,7 @@
 |*                                         - Verkefni 2.1 -                                           *|
 |*                                      ROBOTC on VEX 2.0 CORTEX                                      *|
 |*                                                                                                    *|
-|*  This program makes the robot drive a suicide, first 0.5m, then 1m, 1.5m and so on                 *|
+|*  This program makes the robot drive a suicide, first 0.5m, then 1m, 1.5m and so on based on time.  *|
 |*                                                                                                    *|
 |*                                        ROBOT CONFIGURATION                                         *|
 |*                                                                                                    *|
