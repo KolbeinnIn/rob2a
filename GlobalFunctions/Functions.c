@@ -1,9 +1,25 @@
 void drive(float mul)
 {
 	// mul controls the speed and direction
-	motor[rightMotor] = (int)(mul * 127);
 	motor[leftMotor] = (int)(mul * 127);
+	motor[rightMotor] = (int)(mul * 127);
 }
+
+void turn(int deg, int dir = 1)
+{
+	SensorValue[leftEncoder] = 0;
+
+	while(abs(SensorValue[leftEncoder]) < deg * 2.75)
+	{
+		motor[rightMotor] = dir * 127;
+		motor[leftMotor] = dir * -127;
+	}
+
+	motor[rightMotor] = 0;
+	motor[leftMotor] = 0;
+}
+
+
 
 task stopButton()
 {
