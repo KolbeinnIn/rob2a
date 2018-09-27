@@ -2,7 +2,7 @@
 #pragma config(Motor, port4, leftMotor, tmotorNormal, openLoop, reversed)
 #pragma config(Motor, port5, armMotor, tmotorNormal, openLoop, reversed)
 
-#include "../GlobalFunctions/Functions.h"
+#include "../GlobalFunctions/Functions.c"
 
 /*----------------------------------------------------------------------------------------------------*\
 |*                                         - Verkefni 2.1 -                                           *|
