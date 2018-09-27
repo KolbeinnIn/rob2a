@@ -1,0 +1,10 @@
+start task stopButton
+
+function driveSuicide
+	calculate goal distance
+	drive half speed in the current direction while the current distance is less than the goal distance
+	stop driving
+	swap direction
+
+for i = 0 while i is less than 10
+	call driveSuicide
