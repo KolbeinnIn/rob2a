@@ -1,17 +1,19 @@
 #pragma config(Motor,  port4, leftMotor,    tmotorNormal, openLoop, reversed)
 #pragma config(Motor,  port6, rightMotor,   tmotorNormal, openLoop)
+#pragma config(Motor,  port5, armMotor, tmotorNormal, openLoop, reversed)
 #pragma config(Sensor, dgtl5,	leftEncoder,  sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,	rightEncoder, sensorQuadEncoder)
 #pragma config(Sensor, dgtl12, touchSensor, sensorTouch)
+#pragma config(Sensor, in1, potentiometer, sensorPotentiometer)
 
 #include "../GlobalFunctions/Functions.c"
 
 /*----------------------------------------------------------------------------------------------------*\
-|*                                         - Verkefni 2.2 -                                           *|
+|*                                         - Verkefni 2.3 -                                           *|
 |*                                      ROBOTC on VEX 2.0 CORTEX                                      *|
 |*                                                                                                    *|
-|*  This program makes the robot drive a suicide, first 0.5m, then 1m, 1.5m and so on based on the    *|
-|*  encoder.                                                                                          *|
+|*  This program makes the robot drive 0.5m, turn left 90°, drive 0.5m, turn right 90°, drive 0.5m    *|
+|*  turn 90°, drive 0.5m.                                                                             *|
 |*                                        ROBOT CONFIGURATION                                         *|
 |*                                                                                                    *|
 |*    MOTORS & SENSORS:                                                                               *|
@@ -20,7 +22,7 @@
 |*    Motor Port 4        leftMotor           VEX 3-wire module     Left side motor                   *|
 |*    Digital Port 5      leftEncoder         VEX 2-wire module     Left side encoder                 *|
 |*    Digital Port 3      rightEncoder        VEX 2-wire module     Right side encoder                *|
-|*    Digital Port 12     touchSensor         VEX 2-wire module     Fron button                       *|
+|*    Digital Port 12     touchSensor         VEX 2-wire module     Front button                      *|
 \*----------------------------------------------------------------------------------------------------*/
 
 const float rotations = 1.5; // How many rotations for 0.5m
@@ -29,7 +31,6 @@ int runNum = 0; // Used to calculate the distance to drive
 
 void driveSuicide(int *i)
 {
-	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
 	writeDebugStreamLine("%d", direction);
 
 	if(*i % 2 == 0) runNum++;
@@ -37,10 +38,9 @@ void driveSuicide(int *i)
 	float goalDist = (rotations * runNum * 360);
 	writeDebugStreamLine("%f Goal", goalDist);
 
-	while(abs(SensorValue[leftEncoder]) < goalDist || abs(SensorValue[rightEncoder]) < goalDist)
-		drive(direction / 2); // Drive at half speed
+	drive(goalDist, direction); // Drive at half speed
 
-	drive(0);
+	drive(0, 0);
 
 	writeDebugStreamLine("Left encoder value: %d", SensorValue[leftEncoder]);
 
@@ -50,16 +50,16 @@ void driveSuicide(int *i)
 task main()
 {
 	StartTask(stopButton);
+	StartTask(holdArm);
 
-	turn(45);
-	wait1Msec(500);
-	turn(45, -1);
-  /*
+	turn(720);
+	/*
   wait1Msec(7000);
 	writeDebugStreamLine("Left encoder value: %d", SensorValue[leftEncoder]);
 	writeDebugStreamLine("Right encoder value: %d", SensorValue[rightEncoder]);
 	*/
 
+	wait1Msec(20000);
 
 	StopAllTasks();
 }
