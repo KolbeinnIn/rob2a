@@ -5,6 +5,7 @@ void drive(float mul)
 	motor[rightMotor] = (int)(mul * 127);
 }
 
+// dir 1 (default) turns left, -1 turns right
 void turn(int deg, int dir = 1)
 {
 	SensorValue[leftEncoder] = 0;
@@ -18,8 +19,6 @@ void turn(int deg, int dir = 1)
 	motor[rightMotor] = 0;
 	motor[leftMotor] = 0;
 }
-
-
 
 task stopButton()
 {
