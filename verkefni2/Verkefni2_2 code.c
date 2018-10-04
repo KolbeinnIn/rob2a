@@ -2,7 +2,7 @@
 #pragma config(Motor,  port6, rightMotor,   tmotorNormal, openLoop)
 #pragma config(Motor,  port5, armMotor, tmotorNormal, openLoop, reversed)
 #pragma config(Sensor, dgtl5,	leftEncoder,  sensorQuadEncoder)
-#pragma config(Sensor, dgtl3,	rightEncoder, sensorQuadEncoder)
+#pragma config(Sensor, dgtl7,	rightEncoder, sensorQuadEncoder)
 #pragma config(Sensor, dgtl12, touchSensor, sensorTouch)
 #pragma config(Sensor, in1, potentiometer, sensorPotentiometer)
 
@@ -38,7 +38,7 @@ void driveSuicide(int *i)
 	float goalDist = (rotations * runNum * 360);
 	writeDebugStreamLine("%f Goal", goalDist);
 
-	drive(goalDist, direction); // Drive at half speed
+	drive(goalDist, direction / 2); // Drive at half speed
 
 	drive(0, 0);
 

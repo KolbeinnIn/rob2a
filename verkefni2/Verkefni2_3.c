@@ -21,30 +21,27 @@
 |*    Motor Port 6        rightMotor          VEX 3-wire module     Right side motor                  *|
 |*    Motor Port 4        leftMotor           VEX 3-wire module     Left side motor                   *|
 |*    Digital Port 5      leftEncoder         VEX 2-wire module     Left side encoder                 *|
-|*    Digital Port 3      rightEncoder        VEX 2-wire module     Right side encoder                *|
+|*    Digital Port 7      rightEncoder        VEX 2-wire module     Right side encoder                *|
 |*    Digital Port 12     touchSensor         VEX 2-wire module     Front button                      *|
+|*    Analog Port 1       potentiometer       VEX 2-wire module     Potentiometer                     *|
 \*----------------------------------------------------------------------------------------------------*/
 
-const float rotations = 1.5; // How many rotations for 0.5m
-float direction = 1.0; // Is the robot supposed to drive forward or backwards
-int runNum = 0; // Used to calculate the distance to drive
+const float rotations = 1.3; // How many rotations for 0.5m
+const float goalDist = rotations * 360; // 0.5m
+float direction = -0.5; // Is the robot supposed to drive forward or backwards
 
-void driveSuicide(int *i)
+void driveMaze(int *i)
 {
-	writeDebugStreamLine("%d", direction);
+	if (*i > 0) // Swap to right turns after the first turn
+		direction = 0.5;
 
-	if(*i % 2 == 0) runNum++;
+	drive(goalDist, 0.5);
+	wait1Msec(500);
 
-	float goalDist = (rotations * runNum * 360);
-	writeDebugStreamLine("%f Goal", goalDist);
+	if (*i < 3) // Do not turn after the last drive
+		turn(90, direction);
 
-	drive(goalDist, direction); // Drive at half speed
-
-	drive(0, 0);
-
-	writeDebugStreamLine("Left encoder value: %d", SensorValue[leftEncoder]);
-
-	direction *= -1; // Swap the direction
+	//writeDebugStreamLine("Left encoder value: %d", SensorValue[leftEncoder]);
 }
 
 task main()
@@ -52,14 +49,8 @@ task main()
 	StartTask(stopButton);
 	StartTask(holdArm);
 
-	turn(720);
-	/*
-  wait1Msec(7000);
-	writeDebugStreamLine("Left encoder value: %d", SensorValue[leftEncoder]);
-	writeDebugStreamLine("Right encoder value: %d", SensorValue[rightEncoder]);
-	*/
-
-	wait1Msec(20000);
+	for (int i = 0; i < 4; i++)
+		driveMaze(&i);
 
 	StopAllTasks();
 }
