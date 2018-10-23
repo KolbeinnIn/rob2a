@@ -35,9 +35,7 @@ void turn(int deg, float dir = 1)
 
 task stopButton()
 {
-	while(SensorValue[touchSensor] == 0){}
-
-	writeDebugStreamLine("Takki: %d", SensorValue[touchSensor]);
+	while(SensorValue[touchSensor] == 0 && vexRT[Btn7L] == 0){}
 	StopAllTasks();
 }
 
