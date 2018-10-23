@@ -19,6 +19,5 @@ task main()
     //Left side of the robot is controlled by the left joystick, Y-axis
     motor[leftMotor] = vexRT[Ch3];
   }
-
 	StopAllTasks();
 }
