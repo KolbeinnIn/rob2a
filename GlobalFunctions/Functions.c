@@ -41,13 +41,56 @@ task stopButton()
 
 task holdArm()
 {
-	int initial = SensorValue[potentiometer];
+	//writeDebugStreamLine("start holdArm");
+	while(true)
+	{
+		while(SensorValue(potentiometer) < 640)
+			motor[armMotor] = 50;
+
+		motor[armMotor] = 0;
+	}
+}
+
+task armControl()
+{
+	writeDebugStreamLine("Start armControl");
 
 	while(true)
 	{
-		while(SensorValue(potentiometer) == 0)
-			motor[armMotor] = 30;
+		wait1Msec(1000);
+		writeDebugStreamLine("Arm Control");
+	}
+}
 
-		motor[armMotor] = 0;
+task stopArmControl()
+{
+	StartTask(armControl);
+
+	const int min = 640;
+	const int max = 2400;
+
+	while(true)
+	{
+		int potent = SensorValue[potentiometer];
+
+		if(potent > max)
+		{
+			StopTask(armControl);
+
+			while(potent > max - 50)
+			{
+				motor[armMotor] = -50;
+				potent = SensorValue[potentiometer];
+			}
+
+			motor[armMotor] = 0;
+			StartTask(armControl);
+		}
+		else if(potent < min)
+		{
+			StopTask(armControl);
+			wait1Msec(1000);
+			StartTask(armControl);
+		}
 	}
 }

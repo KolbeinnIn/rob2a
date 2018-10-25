@@ -9,38 +9,43 @@
 
 #include "../GlobalFunctions/Functions.c"
 
-const int deadzone = 10;
+const int deadzone = 20;
 
-//ATH!! connection virkadi aldrei thannig thessi kodi gaeti eda gaeti ekki virkad.
 task main()
 {
-	//StartTask(stopButton);
+	StartTask(stopButton);
+	StartTask(holdArm);
+	//StartTask(stopArmControl);
 
 	while(1 == 1)
-  {
-    //Driving controlled by left stick
-    /*motor[rightMotor] = vexRT[Ch3];
-    motor[leftMotor] = vexRT[Ch3];
+	{
+		int potent = SensorValue[potentiometer];
 
-    //Turning controlled by right stick
-    int tmpRightStickX = vexRT[Ch1];
-    writeDebugStreamLine("%d", tmpRightStickX);
+		if(vexRT[Btn8D] == 1)
+			writeDebugStreamLine("Potentiometer: %d", potent);
 
-    if(tmpRightStickX < -deadzone)
-    {
-    	motor[rightMotor] = tmpRightStickX;
-    	motor[leftMotor] = -tmpRightStickX;
+		int tmpLeftStickX = vexRT[Ch4];
+		int tmpLeftStickY = vexRT[Ch3];
+		int tmpRightStickY = vexRT[Ch2];
+
+		if((tmpLeftStickY < -deadzone || tmpLeftStickY > deadzone) || (tmpLeftStickX < -deadzone || tmpLeftStickX > deadzone))
+		{
+			motor[rightMotor] = vexRT[Ch3] - vexRT[Ch4];
+	    motor[leftMotor] = vexRT[Ch3] + vexRT[Ch4];
     }
-    else if(tmpRightStickX > deadzone)
+    else
     {
-    	motor[rightMotor] = -tmpRightStickX;
-    	motor[leftMotor] = tmpRightStickX;
-    }*/
-
-    motor[rightMotor] = vexRT[Ch3] - vexRT[Ch4];
-    motor[leftMotor] = vexRT[Ch3] + vexRT[Ch4];
-
-    motor[armMotor] = vexRT[Ch2];
+    	motor[leftMotor] = 0;
+    	motor[rightMotor] = 0;
+		}
+		if (tmpRightStickY < -deadzone || tmpRightStickY > deadzone)
+		{
+    	motor[armMotor] = vexRT[Ch2];
+		}
+		else
+		{
+			motor[armMotor] = 0;
+		}
 
     if(vexRT[Btn6U])
     	motor[clawMotor] = 60;
