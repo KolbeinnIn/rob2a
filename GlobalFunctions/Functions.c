@@ -1,9 +1,12 @@
+/* GLOBALS */
+int running = 1;
+
 void drive(float dist, float mul)
 {
 	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
 	SensorValue[rightEncoder] = 0; // Reset the right encoder value so the robot doesn't go too far
 
-	while(abs(SensorValue[leftEncoder]) < dist || abs(SensorValue[rightEncoder]) < dist)
+	while(abs(SensorValue[leftEncoder]) < dist || abs(SensorValue[rightEncoder]) < dist || dist == -1)
 	{
 		// mul controls the speed and direction
 		motor[leftMotor] = (int)(mul * 122); // left motor 5 less because of power difference
@@ -13,8 +16,6 @@ void drive(float dist, float mul)
 	// Stop the motors
 	motor[leftMotor] = 0;
 	motor[rightMotor] = 0;
-
-	writeDebugStreamLine("Left encoder value: %d", SensorValue[leftEncoder]);
 }
 
 // dir 1 (default) turns right, -1 turns left
@@ -53,12 +54,9 @@ task holdArm()
 
 task armControl()
 {
-	writeDebugStreamLine("Start armControl");
-
 	while(true)
 	{
 		wait1Msec(1000);
-		writeDebugStreamLine("Arm Control");
 	}
 }
 
@@ -92,5 +90,17 @@ task stopArmControl()
 			wait1Msec(1000);
 			StartTask(armControl);
 		}
+	}
+}
+
+task stopWhenDark(){
+	while (true){
+		//writeDebugStreamLine("%d", SensorValue[lightSensor]);
+		if (SensorValue[lightSensor] > 270){
+			StopTask(verk4);
+			drive(0,0);
+		}
+		else
+			StartTask(verk4);
 	}
 }
