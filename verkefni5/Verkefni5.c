@@ -13,43 +13,48 @@
 #pragma config(Sensor, in5, lineLeft,    sensorLineFollower)
 
 #include "../GlobalFunctions/Functions.c"
-const int speed = 60;
+const int speed = 45;
 
 task main()
 {
 	StartTask(stopButton);
 	//StartTask(holdArm);
 	//StartTask(stopWhenDark);
-	int thresholdR = 2487;
-	int thresholdM = 2275;
-	int thresholdL = 2360;
-	//int threshold = 2374;
+	int thresholdL = 1651;
+	int thresholdM = 1720;
+	int thresholdR = 1852;
+	int threshold = 1700;
 	while (true){
 		/*
 		writeDebugStreamLine("Left: %d", SensorValue[lineLeft]);
 		writeDebugStreamLine("Mid: %d", SensorValue[lineMid]);
 		writeDebugStreamLine("Right: %d", SensorValue[lineRight]);
 		*/
-		if(SensorValue(lineRight) > thresholdR)
+		if(SensorValue(lineRight) > threshold)
     {
       // counter-steer right:
-      motor[leftMotor]  = speed;
-      motor[rightMotor] = -speed;
-    }
-    // CENTER sensor sees dark:
-    if(SensorValue(lineMid) > thresholdM)
-    {
-      // go straight
-      motor[leftMotor]  = 60;
-      motor[rightMotor] = 60;
-    }
-    // LEFT sensor sees dark:
-    if(SensorValue(lineLeft) > thresholdL)
-    {
-      // counter-steer left:
       motor[leftMotor]  = -speed;
       motor[rightMotor] = speed;
     }
+    // CENTER sensor sees dark:
+    if(SensorValue(lineMid) > threshold)
+    {
+      // go straight
+      motor[leftMotor]  = speed;
+      motor[rightMotor] = speed;
+    }
+    // LEFT sensor sees dark:
+    if(SensorValue(lineLeft) > threshold)
+    {
+      // counter-steer left:
+      motor[leftMotor]  = speed;
+      motor[rightMotor] = -speed;
+    }
+    /*else{
+    	motor[leftMotor]  = -50;
+      motor[rightMotor] = -50;
+    }*/
 	}
+
 	StopAllTasks();
 }

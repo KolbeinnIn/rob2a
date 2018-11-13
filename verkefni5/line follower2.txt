@@ -12,3 +12,25 @@ avg:
 left: 2360
 mid: 2275
 right: 2487
+
+
+
+
+
+
+
+light:
+Left: 532
+Mid: 697
+Right: 939
+
+dark:
+Left: 2771
+Mid: 2744
+Right: 2766
+
+avg:
+Left: 1651
+Mid: 1720
+Right: 1852
+All: 1741
