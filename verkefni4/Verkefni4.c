@@ -31,6 +31,5 @@ task verk4(){
 			drive(-1,1);
 		}
 		turn(60);
-
 	}
 }

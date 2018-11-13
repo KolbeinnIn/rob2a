@@ -1,6 +1,6 @@
 /* GLOBALS */
 int running = 1;
-
+task verk4();
 void drive(float dist, float mul)
 {
 	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
@@ -9,7 +9,7 @@ void drive(float dist, float mul)
 	while(abs(SensorValue[leftEncoder]) < dist || abs(SensorValue[rightEncoder]) < dist || dist == -1)
 	{
 		// mul controls the speed and direction
-		motor[leftMotor] = (int)(mul * 122); // left motor 5 less because of power difference
+		motor[leftMotor] = (int)(mul * 127); // left motor 5 less because of power difference
 		motor[rightMotor] = (int)(mul * 127);
 	}
 

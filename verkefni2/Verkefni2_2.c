@@ -1,10 +1,16 @@
-#pragma config(Motor,  port4, leftMotor,    tmotorNormal, openLoop, reversed)
-#pragma config(Motor,  port6, rightMotor,   tmotorNormal, openLoop)
-#pragma config(Motor,  port5, armMotor, tmotorNormal, openLoop, reversed)
+#pragma config(Motor,  port4, leftMotor,    tmotorVex269, openLoop, reversed)
+#pragma config(Motor,  port6, rightMotor,   tmotorVex269, openLoop)
+#pragma config(Motor,  port5, armMotor,     tmotorVex269, openLoop, reversed)
+#pragma config(Motor,  port3, clawMotor,    tmotorVex269, openLoop, reversed)
 #pragma config(Sensor, dgtl5,	leftEncoder,  sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,	rightEncoder, sensorQuadEncoder)
 #pragma config(Sensor, dgtl12, touchSensor, sensorTouch)
-#pragma config(Sensor, in1, potentiometer, sensorPotentiometer)
+#pragma config(Sensor, in1, potentiometer,  sensorPotentiometer)
+#pragma config(Sensor, dgtl1, sonarSensor,  sensorSONAR_cm)
+#pragma config(Sensor, in2, lightSensor,  sensorReflection)
+#pragma config(Sensor, in3, lineRight,   sensorLineFollower)
+#pragma config(Sensor, in4, lineMid,  sensorLineFollower)
+#pragma config(Sensor, in5, lineLeft,    sensorLineFollower)
 
 #include "../GlobalFunctions/Functions.c"
 

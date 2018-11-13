@@ -1,0 +1,10 @@
+left_dark: 2614
+left_light: 2109
+mid_dark: 2590
+mid_light: 1980
+right_dark: 2722
+right_light: 2232
+
+left: 2361
+mid: 2285
+right: 2477

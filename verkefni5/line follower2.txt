@@ -1,0 +1,14 @@
+left:2096
+mid:1956
+right:2232
+
+
+dark:
+left:2625
+mid:2595
+right:2742
+
+avg:
+left: 2360
+mid: 2275
+right: 2487
