@@ -34,3 +34,23 @@ Left: 1651
 Mid: 1720
 Right: 1852
 All: 1741
+
+
+á borði - verkefni 6
+light:
+left: 165
+mid: 160
+right: 150
+
+dark:
+left:2714
+mid:2687
+right:2639
+
+
+avg:
+left:1440
+mid:1424
+right:1394
+avg(all): 1419
+

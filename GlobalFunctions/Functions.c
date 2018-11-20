@@ -104,3 +104,30 @@ task stopWhenDark(){
 			StartTask(verk4);
 	}
 }
+void followLine(){
+	const int speed = 45;
+	const int threshold = 1419;
+	//while (true){
+		if(SensorValue(lineLeft) > threshold)
+		    {
+		      // counter-steer right:
+		      motor[leftMotor]  = -speed;
+		      motor[rightMotor] = speed;
+		    }
+		    // CENTER sensor sees dark:
+
+		    if(SensorValue(lineMid) > threshold)
+		    {
+		      // go straight
+		      motor[leftMotor]  = speed;
+		      motor[rightMotor] = speed;
+		    }
+		    // LEFT sensor sees dark:
+		    if(SensorValue(lineRight) > threshold)
+		    {
+		      // counter-steer left:
+		      motor[leftMotor]  = speed;
+		      motor[rightMotor] = -speed;
+		    }
+  //}
+}
