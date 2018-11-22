@@ -14,46 +14,52 @@
 
 #include "../GlobalFunctions/Functions.c"
 
-
+void followDrive(int deg, float speed, float dist, int){
+	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
+	SensorValue[rightEncoder] = 0;
+	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist){
+			followLine();
+	}
+	while (true){
+		if (SensorValue[sonarSensor] <= 12){
+			motor[leftMotor] = -40;
+			motor[rightMotor] = -40;
+		}
+		else if (SensorValue[sonarSensor] > 16){
+			motor[leftMotor] = 40;
+			motor[rightMotor] = 40;
+		}
+		else
+			break;
+	}
+	turn(deg,speed);
+}
+float goalDist = 0;
+const float rotations = 1.5; // How many rotations for 0.5m
+const int sMainLine = 12;
 task main()
 {
 	StartTask(stopButton);
 	//StartTask(holdArm);
 	//StartTask(stopWhenDark);
-	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
-	SensorValue[rightEncoder] = 0; // Reset the right encoder value so the robot doesn't go too far
-	const float rotations = 1.5; // How many rotations for 0.5m
-	float direction = 1.0; // Is the robot supposed to drive forward or backwards
-	int runNum = 0; // Used to calculate the distance to drive
-
-
-	float goalDist = (rotations * 2.8 * 360);
-	//drive(goalDist, 0.5/*(direction / 2)*/);
-	//turn(90, 0.5);
 	while (true){
-		while(abs(SensorValue[leftEncoder]) <= goalDist || abs(SensorValue[rightEncoder]) < goalDist){
-			followLine();
-		}
-		turn(20, 0.7);
-		//StartTask(followLine);
-		goalDist = (rotations * 0.5 * 360);
-		while(abs(SensorValue[leftEncoder]) <= goalDist || abs(SensorValue[rightEncoder]) < goalDist){
-			followLine();
-		}
-		turn(150, 0.7);
-		while(abs(SensorValue[leftEncoder]) <= goalDist || abs(SensorValue[rightEncoder]) < goalDist){
-			followLine();
-		}
-		goalDist = (rotations * 2.2 * 360);
-		turn(20, -0.7);
-		while(abs(SensorValue[leftEncoder]) <= goalDist || abs(SensorValue[rightEncoder]) < goalDist){
-			followLine();
-		}
+		writeDebugStreamLine("%d", SensorValue(sonarSensor));
+		/*
+		goalDist = (rotations * 2.8 * 360);
+		followDrive(90,0.7,goalDist); //drive 2m, turn 90 degrees right
+
+		goalDist = (rotations * 0.4 * 360);
+		followDrive(180,0.7,goalDist); //drive 0.5m, turn 180 degrees right
+		followDrive(90,-0.7,goalDist); //drive 0.5m, turn 90 degrees left
+
+		goalDist = (rotations * 2 * 360);
+		followDrive(90,0.7,goalDist);
+
 		/*
 		writeDebugStreamLine("Left: %d", SensorValue[lineLeft]);
 		writeDebugStreamLine("Mid: %d", SensorValue[lineMid]);
 		writeDebugStreamLine("Right: %d", SensorValue[lineRight]);
 		*/
-		StopAllTasks();
+		//StopAllTasks();
 	}
 }
