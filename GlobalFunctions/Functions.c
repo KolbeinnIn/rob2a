@@ -24,7 +24,7 @@ void turn(int deg, float dir = 1)
 	SensorValue[rightEncoder] = 0;
 	SensorValue[leftEncoder] = 0;
 
-	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < deg * 2)
+	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < deg * 1.8)
 	{
 		motor[rightMotor] = dir * -127;
 		motor[leftMotor] = dir * 127;

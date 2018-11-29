@@ -23,9 +23,12 @@ float goalDist = 0;
 void followDrive(int deg, float mSpeed, float dist, int sonarDist){
 	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
 	SensorValue[rightEncoder] = 0;
-	sonarDist += 3;
+	sonarDist += 5;
 
-	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist && dist != 0){
+	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist){
+			if (dist == 0){
+				break;
+			}
 			followLine();
 	}
 
@@ -61,7 +64,6 @@ void box(int deg){
 		followDrive(deg, 0.7, 0, 74);
 }
 
-
 task main()
 {
 	StartTask(stopButton);
@@ -71,7 +73,7 @@ task main()
 		//writeDebugStreamLine("%d", SensorValue(sonarSensor));
 
 		goalDist = (rotations * 2.8 * revolutions);
-		followDrive(90, speed, goalDist, 14); //drive 2m, turn 90 degrees right
+		followDrive(90, speed, goalDist, 15); //drive 2m, turn 90 degrees right
 
 		goalDist = (rotations * 0.4 * revolutions);
 		followDrive(180,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
@@ -86,7 +88,7 @@ task main()
 		followDrive(90, -speed, goalDist, 62); //drive 1m, turn 90 degrees left
 
 		goalDist = (rotations * 0.4 * revolutions);
-		followDrive(180,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
+		followDrive(190,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
 		followDrive(90,speed,goalDist, 74); //drive 0.5m, turn 90 degrees right
 
 		goalDist = (rotations * 1 * revolutions); //
@@ -96,7 +98,7 @@ task main()
 
 		goalDist = (rotations * 0.4 * revolutions);
 		followDrive(90,speed,goalDist, 111); //drive 0.5m, turn 90 degrees right
-		followDrive(180,speed,goalDist, 38); //drive 0.5m, turn 180 degrees right
+		followDrive(190,speed,goalDist, 38); //drive 0.5m, turn 180 degrees right
 		followDrive(90, -speed, goalDist, 74); //drive 0.5m turn 90 degrees left
 		followDrive(90, speed, goalDist, 66);//drive 0.5m turn 90 degrees right
 
