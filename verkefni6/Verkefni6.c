@@ -15,6 +15,7 @@
 #include "../GlobalFunctions/Functions.c"
 
 void followDrive(int deg, float speed, float dist, int){
+
 	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
 	SensorValue[rightEncoder] = 0;
 	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist){
