@@ -13,48 +13,97 @@
 #pragma config(Sensor, in5, lineRight,    sensorLineFollower)
 
 #include "../GlobalFunctions/Functions.c"
+const float speed = 0.7;
+const float rotations = 1.5; // How many rotations for 0.5m
+const int revolutions= 360;
+const int sMainLine = 12;
+float goalDist = 0;
 
-void followDrive(int deg, float speed, float dist, int){
 
+void followDrive(int deg, float mSpeed, float dist, int sonarDist){
 	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
 	SensorValue[rightEncoder] = 0;
-	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist){
+	sonarDist += 3;
+
+	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist && dist != 0){
 			followLine();
 	}
+
 	while (true){
-		if (SensorValue[sonarSensor] <= 12){
+		if (SensorValue[sonarSensor] <= sonarDist - 2){
 			motor[leftMotor] = -40;
 			motor[rightMotor] = -40;
 		}
-		else if (SensorValue[sonarSensor] > 16){
+		else if (SensorValue[sonarSensor] >= sonarDist + 2){
 			motor[leftMotor] = 40;
 			motor[rightMotor] = 40;
 		}
 		else
 			break;
 	}
-	turn(deg,speed);
+
+	turn(deg,mSpeed);
 }
-float goalDist = 0;
-const float rotations = 1.5; // How many rotations for 0.5m
-const int sMainLine = 12;
+
+void box(int deg){
+		SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
+		SensorValue[rightEncoder] = 0;
+		while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < 216){
+			followLine();
+		}
+		wait1Msec(100);
+		motor[leftMotor] = -40; //back up for a bit
+		motor[rightMotor] = -40;
+		wait1Msec(200);
+		motor[leftMotor] = 0;
+		motor[rightMotor] = 0;
+		turn(200,0.7);
+		followDrive(deg, 0.7, 0, 74);
+}
+
+
 task main()
 {
 	StartTask(stopButton);
 	//StartTask(holdArm);
 	//StartTask(stopWhenDark);
 	while (true){
-		writeDebugStreamLine("%d", SensorValue(sonarSensor));
-		/*
-		goalDist = (rotations * 2.8 * 360);
-		followDrive(90,0.7,goalDist); //drive 2m, turn 90 degrees right
+		//writeDebugStreamLine("%d", SensorValue(sonarSensor));
 
-		goalDist = (rotations * 0.4 * 360);
-		followDrive(180,0.7,goalDist); //drive 0.5m, turn 180 degrees right
-		followDrive(90,-0.7,goalDist); //drive 0.5m, turn 90 degrees left
+		goalDist = (rotations * 2.8 * revolutions);
+		followDrive(90, speed, goalDist, 14); //drive 2m, turn 90 degrees right
 
-		goalDist = (rotations * 2 * 360);
-		followDrive(90,0.7,goalDist);
+		goalDist = (rotations * 0.4 * revolutions);
+		followDrive(180,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
+		followDrive(90,-speed,goalDist, 74); //drive 0.5m, turn 90 degrees left
+
+		goalDist = (rotations * 2 * revolutions);
+		followDrive(90,speed,goalDist, 66); //drive 1.5m, turn 90 right
+
+		box(-90); //first drop
+
+		goalDist = (rotations * 1 * revolutions); //
+		followDrive(90, -speed, goalDist, 62); //drive 1m, turn 90 degrees left
+
+		goalDist = (rotations * 0.4 * revolutions);
+		followDrive(180,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
+		followDrive(90,speed,goalDist, 74); //drive 0.5m, turn 90 degrees right
+
+		goalDist = (rotations * 1 * revolutions); //
+		followDrive(90, speed, goalDist, 66); //drive 1m, turn 90 degrees right
+
+		box(-90); //second drop
+
+		goalDist = (rotations * 0.4 * revolutions);
+		followDrive(90,speed,goalDist, 111); //drive 0.5m, turn 90 degrees right
+		followDrive(180,speed,goalDist, 38); //drive 0.5m, turn 180 degrees right
+		followDrive(90, -speed, goalDist, 74); //drive 0.5m turn 90 degrees left
+		followDrive(90, speed, goalDist, 66);//drive 0.5m turn 90 degrees right
+
+		box(90);
+
+
+
 
 		/*
 		writeDebugStreamLine("Left: %d", SensorValue[lineLeft]);
