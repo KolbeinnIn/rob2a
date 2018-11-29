@@ -13,7 +13,7 @@
 #pragma config(Sensor, in5, lineRight,    sensorLineFollower)
 
 #include "../GlobalFunctions/Functions.c"
-const float speed = 0.7;
+const float speed = 1;
 const float rotations = 1.5; // How many rotations for 0.5m
 const int revolutions= 360;
 const int sMainLine = 12;
@@ -24,8 +24,10 @@ void followDrive(int deg, float mSpeed, float dist, int sonarDist){
 	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
 	SensorValue[rightEncoder] = 0;
 	sonarDist += 5;
+	dist *= 2;
 
-	while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist){
+	//while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist){
+	while(abs(SensorValue[rightEncoder]) < dist){
 			if (dist == 0){
 				break;
 			}
@@ -45,7 +47,11 @@ void followDrive(int deg, float mSpeed, float dist, int sonarDist){
 			break;
 	}
 
-	turn(deg,mSpeed);
+	turn(15, mSpeed);
+
+	do {
+		turn(5, mSpeed);
+	} while(!findLine());
 }
 
 void box(int deg){
@@ -72,14 +78,14 @@ task main()
 	while (true){
 		//writeDebugStreamLine("%d", SensorValue(sonarSensor));
 
-		goalDist = (rotations * 2.8 * revolutions);
+		goalDist = (rotations * 2 * revolutions);
 		followDrive(90, speed, goalDist, 15); //drive 2m, turn 90 degrees right
 
-		goalDist = (rotations * 0.4 * revolutions);
+		goalDist = (rotations * 0.5 * revolutions);
 		followDrive(180,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
 		followDrive(90,-speed,goalDist, 74); //drive 0.5m, turn 90 degrees left
 
-		goalDist = (rotations * 2 * revolutions);
+		goalDist = (rotations * 1.5 * revolutions);
 		followDrive(90,speed,goalDist, 66); //drive 1.5m, turn 90 right
 
 		box(-90); //first drop
@@ -87,7 +93,7 @@ task main()
 		goalDist = (rotations * 1 * revolutions); //
 		followDrive(90, -speed, goalDist, 62); //drive 1m, turn 90 degrees left
 
-		goalDist = (rotations * 0.4 * revolutions);
+		goalDist = (rotations * 0.5 * revolutions);
 		followDrive(190,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
 		followDrive(90,speed,goalDist, 74); //drive 0.5m, turn 90 degrees right
 
@@ -96,7 +102,7 @@ task main()
 
 		box(-90); //second drop
 
-		goalDist = (rotations * 0.4 * revolutions);
+		goalDist = (rotations * 0.5 * revolutions);
 		followDrive(90,speed,goalDist, 111); //drive 0.5m, turn 90 degrees right
 		followDrive(190,speed,goalDist, 38); //drive 0.5m, turn 180 degrees right
 		followDrive(90, -speed, goalDist, 74); //drive 0.5m turn 90 degrees left
@@ -112,6 +118,6 @@ task main()
 		writeDebugStreamLine("Mid: %d", SensorValue[lineMid]);
 		writeDebugStreamLine("Right: %d", SensorValue[lineRight]);
 		*/
-		//StopAllTasks();
+		StopAllTasks();
 	}
 }

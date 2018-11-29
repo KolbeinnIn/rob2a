@@ -105,7 +105,7 @@ task stopWhenDark(){
 	}
 }
 void followLine(){
-	const int speed = 45;
+	const int speed = 60;
 	const int threshold = 1419;
 	//while (true){
 		if(SensorValue(lineLeft) > threshold)
@@ -130,4 +130,16 @@ void followLine(){
 		      motor[rightMotor] = -speed;
 		    }
   //}
+}
+
+bool findLine()
+{
+	const int threshold = 1419;
+
+	if(SensorValue(lineMid) > threshold)
+	{
+		return true;
+	}
+
+	return false;
 }
