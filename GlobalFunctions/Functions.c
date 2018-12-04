@@ -105,7 +105,7 @@ task stopWhenDark(){
 	}
 }
 void followLine(){
-	const int speed = 60;
+	const int speed = 50;
 	const int threshold = 1419;
 	//while (true){
 		if(SensorValue(lineLeft) > threshold)

@@ -13,7 +13,7 @@
 #pragma config(Sensor, in5, lineRight,    sensorLineFollower)
 
 #include "../GlobalFunctions/Functions.c"
-const float speed = 1;
+const float speed = 0.7;
 const float rotations = 1.5; // How many rotations for 0.5m
 const int revolutions= 360;
 const int sMainLine = 12;
@@ -35,11 +35,14 @@ void followDrive(int deg, float mSpeed, float dist, int sonarDist){
 	}
 
 	while (true){
+
 		if (SensorValue[sonarSensor] <= sonarDist - 2){
+			writeDebugStreamLine("bakka");
 			motor[leftMotor] = -40;
 			motor[rightMotor] = -40;
 		}
 		else if (SensorValue[sonarSensor] >= sonarDist + 2){
+			writeDebugStreamLine("afram");
 			motor[leftMotor] = 40;
 			motor[rightMotor] = 40;
 		}
@@ -47,11 +50,11 @@ void followDrive(int deg, float mSpeed, float dist, int sonarDist){
 			break;
 	}
 
-	turn(15, mSpeed);
+	turn(deg, mSpeed);
 
-	do {
+	/*do {
 		turn(5, mSpeed);
-	} while(!findLine());
+	} while(!findLine());*/
 }
 
 void box(int deg){
@@ -82,8 +85,10 @@ task main()
 		followDrive(90, speed, goalDist, 15); //drive 2m, turn 90 degrees right
 
 		goalDist = (rotations * 0.5 * revolutions);
-		followDrive(180,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
-		followDrive(90,-speed,goalDist, 74); //drive 0.5m, turn 90 degrees left
+		followDrive(190,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
+
+		goalDist = (rotations * 0.25 * revolutions);
+		followDrive(90,-speed,goalDist, 76); //drive 0.5m, turn 90 degrees left
 
 		goalDist = (rotations * 1.5 * revolutions);
 		followDrive(90,speed,goalDist, 66); //drive 1.5m, turn 90 right
@@ -104,8 +109,14 @@ task main()
 
 		goalDist = (rotations * 0.5 * revolutions);
 		followDrive(90,speed,goalDist, 111); //drive 0.5m, turn 90 degrees right
+
+		goalDist = (rotations * 0.5 * revolutions);
 		followDrive(190,speed,goalDist, 38); //drive 0.5m, turn 180 degrees right
+
+		goalDist = (rotations * 0.5 * revolutions);
 		followDrive(90, -speed, goalDist, 74); //drive 0.5m turn 90 degrees left
+
+		goalDist = (rotations * 0.5 * revolutions);
 		followDrive(90, speed, goalDist, 66);//drive 0.5m turn 90 degrees right
 
 		box(90);
