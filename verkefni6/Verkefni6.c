@@ -22,7 +22,6 @@ int sonarValues[] = {15, 33,  76,   66,  -1, 62, 33,  76,  66, -1, 111, 38,  76,
 int turnDir[] =     {1,  1,   -1,   1,   0,  -1, 1,   1,   1,  0,  1,   1,   -1,  1,   0}; /* 0 is box drop */
 bool pickup[] =     {0,  1,   0,    0,   0,  0,  1,   0,   0,  0,  0,   1,   0,   0,   0};
 
-// void followDrive(int deg, float mSpeed, float dist, int sonarDist){
 void followDrive(float mSpeed, float dist, int sonarDist){
 	SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
 	SensorValue[rightEncoder] = 0;
@@ -30,12 +29,10 @@ void followDrive(float mSpeed, float dist, int sonarDist){
 	sonarDist += 5;
 	dist *= 2;
 
-	//while((abs(SensorValue[rightEncoder]) + abs(SensorValue[leftEncoder])) / 2 < dist){
 	while(abs(SensorValue[rightEncoder]) < dist){
 			if (dist == 0){
 				break;
 			}
-
 			followLine();
 	}
 
@@ -61,7 +58,7 @@ void followDrive(float mSpeed, float dist, int sonarDist){
 	motor[rightMotor] = 0;
 
 	wait1Msec(500);
-
+	//writeDebugStreamLine("before turn");
 	turn(10, mSpeed);
 
 	do {
@@ -69,30 +66,6 @@ void followDrive(float mSpeed, float dist, int sonarDist){
 	} while(!findLine());
 }
 
-/*
-void box(int deg){
-		SensorValue[leftEncoder] = 0; // Reset the left encoder value so the robot doesn't go too far
-		SensorValue[rightEncoder] = 0;
-
-		while(abs(SensorValue[rightEncoder]) < 216){ // 216 = 360 * 1.5 * 0.4
-			followLine();
-		}
-
-		wait1Msec(100);
-
-		motor[leftMotor] = -40; //back up for a bit
-		motor[rightMotor] = -40;
-
-		wait1Msec(200);
-
-		motor[leftMotor] = 0;
-		motor[rightMotor] = 0;
-
-		turn(200,0.7);
-
-		followDrive(deg, 0.7, 0, 74);
-}
-*/
 int len = sizeof(distances) / sizeof(distances[0];
 int light = SensorValue(lightSensor);
 task taskMain()
@@ -120,50 +93,10 @@ task taskMain()
 			else
 			{
 				goalDist = (rotations * distances[i] * revolutions);
-				followDrive(0.6 * turnDir[i], goalDist, sonarValues[i]);
+				followDrive(0.7 * turnDir[i], goalDist, sonarValues[i]);
 				wait1Msec(500); // Give the robot time to think
 			}
 		}
-		/*goalDist = (rotations * 2 * revolutions);
-		followDrive(90, speed, goalDist, 15); //drive 2m, turn 90 degrees right
-
-		goalDist = (rotations * 0.5 * revolutions);
-		followDrive(190,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
-
-		goalDist = (rotations * 0.25 * revolutions);
-		followDrive(90,-speed,goalDist, 76); //drive 0.5m, turn 90 degrees left
-
-		goalDist = (rotations * 1.5 * revolutions);
-		followDrive(90,speed,goalDist, 66); //drive 1.5m, turn 90 right
-
-		box(-90); //first drop
-
-		goalDist = (rotations * 1 * revolutions); //
-		followDrive(90, -speed, goalDist, 62); //drive 1m, turn 90 degrees left
-
-		goalDist = (rotations * 0.5 * revolutions);
-		followDrive(190,speed,goalDist, 33); //drive 0.5m, turn 180 degrees right
-		followDrive(90,speed,goalDist, 74); //drive 0.5m, turn 90 degrees right
-
-		goalDist = (rotations * 1 * revolutions); //
-		followDrive(90, speed, goalDist, 66); //drive 1m, turn 90 degrees right
-
-		box(-90); //second drop
-
-		goalDist = (rotations * 0.5 * revolutions);
-		followDrive(90,speed,goalDist, 111); //drive 0.5m, turn 90 degrees right
-
-		goalDist = (rotations * 0.5 * revolutions);
-		followDrive(190,speed,goalDist, 38); //drive 0.5m, turn 180 degrees right
-
-		goalDist = (rotations * 0.5 * revolutions);
-		followDrive(90, -speed, goalDist, 74); //drive 0.5m turn 90 degrees left
-
-		goalDist = (rotations * 0.5 * revolutions);
-		followDrive(90, speed, goalDist, 66);//drive 0.5m turn 90 degrees right
-
-		box(90);*/
-
 		StopAllTasks();
 	}
 }
@@ -173,5 +106,4 @@ task main()
 	StartTask(stopButton);
 	StartTask(stopWhenDark);
 	while (true){}
-	//StartTask(taskMain);
 }

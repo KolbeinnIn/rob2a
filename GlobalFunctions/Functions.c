@@ -19,9 +19,9 @@ void drive(float dist, float mul)
 	motor[rightMotor] = 0;
 }
 
-// dir 1 (default) turns right, -1 turns left
+
 void turn(int deg, float dir = 1)
-{
+{// dir 1 (default) turns right, -1 turns left
 	SensorValue[rightEncoder] = 0;
 	SensorValue[leftEncoder] = 0;
 
@@ -118,31 +118,23 @@ task stopWhenDark(){
 void followLine(int diff = 0){
 	const int speed = 50;
 	const int threshold = 1419;
-
 	if(SensorValue(lineLeft) > threshold)
   {
-    // counter-steer right:
     motor[leftMotor]  = -speed - diff;
     motor[rightMotor] = speed + diff;
   }
-  // CENTER sensor sees dark:
 
   if(SensorValue(lineMid) > threshold)
   {
-    // go straight
     motor[leftMotor]  = speed + diff;
     motor[rightMotor] = speed + diff;
   }
 
-  // LEFT sensor sees dark:
   if(SensorValue(lineRight) > threshold)
   {
-    // counter-steer left:
     motor[leftMotor]  = speed + diff;
     motor[rightMotor] = -speed - diff;
   }
-
-  writeDebugStreamLine("Speed: %d", speed + diff);
 }
 
 bool findLine()
